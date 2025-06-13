@@ -1,0 +1,795 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "Splitwise Clone API",
+		"description": "Complete API collection for Splitwise Clone - Expense Splitting Application\n\nThis collection includes all endpoints for managing shared expenses, calculating balances, and generating optimal settlements.\n\n**Base URL:** {{base_url}}/api\n\n**Features:**\n- Expense CRUD operations\n- Automatic participant detection\n- Balance calculations\n- Optimal settlement algorithm\n- Input validation and error handling\n\n**Environment Variables:**\n- base_url: Your backend URL (e.g., http://localhost:8001)\n\n**Test Scenarios Included:**\n- Create expenses for Shantanu, Sanket, and Om\n- Update Om's petrol expense\n- Delete Sanket's pizza expense\n- View balances and settlements",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "API Health Check",
+			"item": [
+				{
+					"name": "Get API Root",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								""
+							]
+						},
+						"description": "Check if the API is running and accessible"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"message\": \"Splitwise Clone API\"\n    },\n    \"message\": \"API is running\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Expense Management",
+			"item": [
+				{
+					"name": "Create Expense - Shantanu Dinner",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 600,\n    \"description\": \"Dinner\",\n    \"paid_by\": \"Shantanu\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/expenses",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses"
+							]
+						},
+						"description": "Create a new expense where Shantanu paid ₹600 for dinner"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"amount\": 600,\n    \"description\": \"Dinner\",\n    \"paid_by\": \"Shantanu\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/expenses",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"expenses"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n        \"amount\": 600,\n        \"description\": \"Dinner\",\n        \"paid_by\": \"shantanu\",\n        \"participants\": [\"shantanu\", \"sanket\", \"om\"],\n        \"date_created\": \"2024-06-13T10:30:00Z\",\n        \"date_updated\": \"2024-06-13T10:30:00Z\"\n    },\n    \"message\": \"Expense created successfully\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Create Expense - Sanket Groceries",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 450,\n    \"description\": \"Groceries\",\n    \"paid_by\": \"Sanket\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/expenses",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses"
+							]
+						},
+						"description": "Create a new expense where Sanket paid ₹450 for groceries"
+					}
+				},
+				{
+					"name": "Create Expense - Om Petrol",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 300,\n    \"description\": \"Petrol\",\n    \"paid_by\": \"Om\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/expenses",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses"
+							]
+						},
+						"description": "Create a new expense where Om paid ₹300 for petrol (will be updated later)"
+					}
+				},
+				{
+					"name": "Create Expense - Shantanu Movie",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 500,\n    \"description\": \"Movie Tickets\",\n    \"paid_by\": \"Shantanu\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/expenses",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses"
+							]
+						},
+						"description": "Create a new expense where Shantanu paid ₹500 for movie tickets"
+					}
+				},
+				{
+					"name": "Create Expense - Sanket Pizza",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 280,\n    \"description\": \"Pizza\",\n    \"paid_by\": \"Sanket\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/expenses",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses"
+							]
+						},
+						"description": "Create a new expense where Sanket paid ₹280 for pizza (will be deleted later)"
+					}
+				},
+				{
+					"name": "Get All Expenses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/expenses",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses"
+							]
+						},
+						"description": "Retrieve all expenses in the system"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/expenses",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"expenses"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": [\n        {\n            \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n            \"amount\": 600,\n            \"description\": \"Dinner\",\n            \"paid_by\": \"shantanu\",\n            \"participants\": [\"shantanu\", \"sanket\", \"om\"],\n            \"date_created\": \"2024-06-13T10:30:00Z\",\n            \"date_updated\": \"2024-06-13T10:30:00Z\"\n        },\n        {\n            \"id\": \"456e7890-e12b-34d5-a678-912345678901\",\n            \"amount\": 450,\n            \"description\": \"Groceries\",\n            \"paid_by\": \"sanket\",\n            \"participants\": [\"shantanu\", \"sanket\", \"om\"],\n            \"date_created\": \"2024-06-13T10:35:00Z\",\n            \"date_updated\": \"2024-06-13T10:35:00Z\"\n        }\n    ],\n    \"message\": \"Expenses retrieved successfully\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Single Expense",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/expenses/{{expense_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses",
+								"{{expense_id}}"
+							]
+						},
+						"description": "Retrieve a specific expense by ID"
+					}
+				},
+				{
+					"name": "Update Expense - Om Petrol to 350",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 350\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/expenses/{{expense_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses",
+								"{{expense_id}}"
+							]
+						},
+						"description": "Update Om's petrol expense from ₹300 to ₹350"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"amount\": 350\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/expenses/{{expense_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"expenses",
+										"{{expense_id}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"id\": \"789e0123-e45b-67d8-a901-234567890123\",\n        \"amount\": 350,\n        \"description\": \"Petrol\",\n        \"paid_by\": \"om\",\n        \"participants\": [\"shantanu\", \"sanket\", \"om\"],\n        \"date_created\": \"2024-06-13T10:40:00Z\",\n        \"date_updated\": \"2024-06-13T11:00:00Z\"\n    },\n    \"message\": \"Expense updated successfully\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Expense",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/expenses/{{expense_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses",
+								"{{expense_id}}"
+							]
+						},
+						"description": "Delete Sanket's pizza expense"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/expenses/{{expense_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"expenses",
+										"{{expense_id}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"deleted_id\": \"012e3456-e78b-90d1-a234-567890123456\"\n    },\n    \"message\": \"Expense deleted successfully\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "People & Balances",
+			"item": [
+				{
+					"name": "Get All People",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/people",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"people"
+							]
+						},
+						"description": "Get all people mentioned in expenses (auto-extracted)"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/people",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"people"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": [\n        \"om\",\n        \"sanket\",\n        \"shantanu\"\n    ],\n    \"message\": \"People retrieved successfully\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Balances",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/balances",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"balances"
+							]
+						},
+						"description": "Get net balance for each person (positive = owed money, negative = owes money)"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/balances",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"balances"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": [\n        {\n            \"person\": \"shantanu\",\n            \"balance\": 433.33\n        },\n        {\n            \"person\": \"om\",\n            \"balance\": -116.67\n        },\n        {\n            \"person\": \"sanket\",\n            \"balance\": -316.67\n        }\n    ],\n    \"message\": \"Balances calculated successfully\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Settlements",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/settlements",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"settlements"
+							]
+						},
+						"description": "Get optimal settlement transactions to minimize number of payments"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/settlements",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"settlements"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": [\n        {\n            \"from_person\": \"sanket\",\n            \"to_person\": \"shantanu\",\n            \"amount\": 316.67\n        },\n        {\n            \"from_person\": \"om\",\n            \"to_person\": \"shantanu\",\n            \"amount\": 116.67\n        }\n    ],\n    \"message\": \"Settlements calculated successfully\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Error Testing",
+			"item": [
+				{
+					"name": "Create Expense - Negative Amount",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": -100,\n    \"description\": \"Negative Test\",\n    \"paid_by\": \"Tester\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/expenses",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses"
+							]
+						},
+						"description": "Test validation - should return 400 error for negative amount"
+					},
+					"response": [
+						{
+							"name": "Error Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"amount\": -100,\n    \"description\": \"Negative Test\",\n    \"paid_by\": \"Tester\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/expenses",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"expenses"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"detail\": \"Amount must be positive\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Create Expense - Empty Description",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 100,\n    \"description\": \"\",\n    \"paid_by\": \"Tester\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/expenses",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses"
+							]
+						},
+						"description": "Test validation - should return 400 error for empty description"
+					},
+					"response": [
+						{
+							"name": "Error Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"amount\": 100,\n    \"description\": \"\",\n    \"paid_by\": \"Tester\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/expenses",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"expenses"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"detail\": \"Description cannot be empty\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Non-existent Expense",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/expenses/non-existent-id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses",
+								"non-existent-id"
+							]
+						},
+						"description": "Test error handling - should return 404 for non-existent expense"
+					},
+					"response": [
+						{
+							"name": "Error Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/expenses/non-existent-id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"expenses",
+										"non-existent-id"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"detail\": \"Expense not found\"\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"description": "Base URL for the Splitwise Clone API"
+		},
+		{
+			"key": "expense_id",
+			"value": "",
+			"description": "Expense ID for update/delete operations"
+		}
+	]
+}
