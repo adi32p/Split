@@ -83,7 +83,7 @@ splitwise-clone/
 1. **Install Node.js dependencies:**
    ```bash
    cd frontend
-   yarn install
+   npm install
    ```
 
 2. **Configure environment variables:**
@@ -94,7 +94,7 @@ splitwise-clone/
 
 3. **Start the frontend development server:**
    ```bash
-   yarn start
+   npm run dev
    ```
 
 The application will be available at `http://localhost:3000`
